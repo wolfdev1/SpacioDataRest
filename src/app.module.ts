@@ -8,6 +8,7 @@ import { RankModule } from './rank/rank.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { ModModule } from './mod/mod.module';
+import { ChannelModule } from './channels/channel.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ModModule } from './mod/mod.module';
     RankModule,
     DatabaseModule,
     ModModule,
+    ChannelModule,
   ],
   controllers: [AppController],
   providers: [AppService],

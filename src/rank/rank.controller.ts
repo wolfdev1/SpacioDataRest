@@ -1,4 +1,4 @@
-import { Controller, Get, Injectable, NotFoundException, Param, Res } from '@nestjs/common';
+import { Controller, Get, Injectable, Res } from '@nestjs/common';
 
 import { Response } from 'express';
 import { User } from '../schemas/user.schema';

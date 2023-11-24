@@ -12,7 +12,7 @@ export class WarningsService {
   async getUserWarnings(user?: User): Promise<{ [key: number]: Warn }> {
 
     if (!user) {
-      throw new NotFoundException('Could not find user. Please check the userId and add to request query.');
+      throw new NotFoundException('Could not find user. Please check the userId and add to request params.');
     }
     const warns = await this.warnModel.find({userId: user.userId}).exec();
     if (warns.length === 0) {
@@ -25,7 +25,7 @@ export class WarningsService {
   async deleteWarn(warn?: Warn): Promise<any> {
 
     if (!warn) {
-      throw new NotFoundException('Could not find warn. Please check the warnId and add to request query.');
+      throw new NotFoundException('Could not find warn. Please check the warnId and add to request params.');
     }
     await this.warnModel.deleteOne({warnId: warn.warnId}).exec()
     .then(() => this.logger.log(`Warn ${warn.warnId} deleted from user ${warn.userId}.`));
