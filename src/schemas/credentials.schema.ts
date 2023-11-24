@@ -6,21 +6,14 @@ export type CredentialsDocument = HydratedDocument<Credentials>;
 @Schema()
 export class Credentials {
   @Prop()
+  username: string;
+
+  @Prop()
   password: string;
 
   @Prop()
-  username: string;
-
-  @Prop({ type: { user: Boolean, rank: Boolean, mod: Boolean, roles: Boolean, channels: Boolean } })
-  perms: {
-    user: boolean,
-    rank: boolean,
-    mod: boolean,
-    roles: boolean,
-    channels: boolean,
-  }
+  perms: string;
   
-
 }
 
 export const CredentialsSchema = SchemaFactory.createForClass(Credentials);

@@ -6,18 +6,25 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
+
   constructor(
     private credentialsService: CredentialsService,
     private jwtService: JwtService
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const c = await this.credentialsService.findOne(username);
-    if (c && await bcrypt.compare(pass, c.password)) {
-      const { password, ...result } = c;
-      return result;
+  async decode(token: string): Promise<any> {
+    try {
+      const payload = this.jwtService.decode(token) as any;
+      console.log(payload);
+
+      const c = await this.credentialsService.findOne(payload.username);
+      if (c) {
+        return payload;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   async login(credentials: Credentials) {

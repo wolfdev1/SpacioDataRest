@@ -1,6 +1,6 @@
 import { Controller, Get, Injectable, NotFoundException, Param, Res } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Schema } from 'mongoose';
+import { Model } from 'mongoose';
 import { UserDto } from '../dto/user.dto';
 import { Response } from 'express';
 
@@ -27,7 +27,7 @@ export class UserController {
       
     }
     if (!user) {
-      throw new NotFoundException('Could not find user. 1');
+      throw new NotFoundException('Could not find user. Please check the id.');
     }
     return user;
   }

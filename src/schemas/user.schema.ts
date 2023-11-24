@@ -17,6 +17,9 @@ export class User {
   @Prop()
   xp: number;
   level: number;
+  
+  @Prop()
+  _id: false;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

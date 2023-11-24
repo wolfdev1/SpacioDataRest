@@ -14,14 +14,12 @@ export class AuthMiddleware implements NestMiddleware {
     }
 
     try {
-      const username = authHeader.split(' ')[1];
-      const pass = authHeader.split(' ')[2];
+      const token = authHeader.split(' ')[0];
       
-      const payload = await this.authService.validateUser(username, pass);
+      const payload = await this.authService.decode(token);
       if (!payload) {
         throw new UnauthorizedException('Invalid token');
       }
-      req['user'] = payload;
     } catch (e) {
       throw new UnauthorizedException('Invalid token');
     }
