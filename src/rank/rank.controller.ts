@@ -1,7 +1,5 @@
 import { Controller, Get, Injectable, NotFoundException, Param, Res } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { UserDto } from '../dto/user.dto';
+
 import { Response } from 'express';
 import { User } from '../schemas/user.schema';
 import { Put, Query } from '@nestjs/common/decorators/http';
@@ -10,7 +8,7 @@ import { RankService } from './rank.service';
 @Controller("rank")
 @Injectable()
 export class RankController {
-  constructor(@InjectModel('User') private readonly userModel: Model<UserDto>, private readonly rankService: RankService) {}
+  constructor(private readonly rankService: RankService) {}
   private readonly msg = { message: "Bad Request. This endpoint works with PUT requests and use /rank/user/resetxp or ../setxp endpoints." };
   
   @Get()
@@ -32,8 +30,13 @@ export class RankController {
 
     @Put('user/setxp')
     async putSetXp(@Query('userId') userId: string, @Query('xp') xp: number, @Res() res: Response): Promise<any> {
-        const user = await this.rankService.setXp(await this.rankService.getUserById(userId), xp);
+
+        try {
+        const user = await this.rankService.setXp(await this.rankService.getUserById(userId), parseInt(xp.toString()));
         res.status(user.status).json(user);
+        } catch (error) {
+            res.status(400).json({ message: "Bad Request. Please check the id and xp." });
+        }
     }
 
     @Get('user/resetxp')

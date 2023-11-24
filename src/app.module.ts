@@ -7,6 +7,7 @@ import { CredentialsModule } from './credentials/credentials.module';
 import { RankModule } from './rank/rank.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
+import { ModModule } from './mod/mod.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { DatabaseModule } from './database/database.module';
     CredentialsModule,
     RankModule,
     DatabaseModule,
+    ModModule,
   ],
   controllers: [AppController],
   providers: [AppService],

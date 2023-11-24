@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { RankController } from './rank.controller';
 import { RankService } from './rank.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -11,7 +11,7 @@ import { CredentialsSchema } from 'src/schemas/credentials.schema';
         MongooseModule.forFeature([{ name: 'Credentials', schema: CredentialsSchema }])
     ],
     controllers: [RankController],
-    providers: [RankService],
+    providers: [RankService, Logger],
 })
 
 export class RankModule {}
