@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CredentialsService } from '../credentials/credentials.service';
 import { Credentials } from '../interfaces/credentials.interface';
@@ -14,14 +14,13 @@ export class AuthService {
 
   async decode(token: string): Promise<any> {
     try {
-      const payload = this.jwtService.decode(token) as any;
-      console.log(payload);
+      const payload = this.jwtService.verify(token, {secret: process.env.JWT_SECRET});
 
       const c = await this.credentialsService.findOne(payload.username);
       if (c) {
         return payload;
       }
-      return null;
+      return new UnauthorizedException('Unauthorized. Token sign appears to be valid but user does not exist');
     } catch (e) {
       return null;
     }
