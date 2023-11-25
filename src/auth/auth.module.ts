@@ -15,7 +15,7 @@ export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
     .apply(AuthMiddleware)
-    .forRoutes('user', 'rank', 'mod');
+    .forRoutes('user', 'rank', 'mod', "channels");
 
   }
 }
