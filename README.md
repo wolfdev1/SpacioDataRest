@@ -1,73 +1,65 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+<h1 align="center">
+  Spacio REST Service
+</h1>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This service is a REST API that allows you to manage the data of the [Spacio Discord Bot project](https://github.com/wolfdev1/Spacio) and interact with other Spacio services in the future.
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 💻 Technologies
 
-## Installation
+This project was on active development so is not finished yet and is possible that other technologies may added in the future, but it was built with
 
-```bash
-$ npm install
-```
+- [Node.js](https://nodejs.org/en/) - JavaScript runtime environment
+- [NestJS](https://nestjs.com/) - A progressive Node.js framework for building efficient, reliable and scalable server-side applications.
+- [TypeScript](https://www.typescriptlang.org/) - A typed superset of JavaScript that compiles to plain JavaScript.
+- [MongoDB](https://www.mongodb.com/) - A document-oriented NoSQL database used for high volume data storage.
+- [Docker](https://www.docker.com/) - A set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
+- [GitHub Actions](https://github.com/features/actions) - Automate, customize, and execute your software development workflows right in your repository.
 
-## Running the app
+## 🤖 First steps
 
-```bash
-# development
-$ npm run start
+- You need to have [Node.js 19.x](https://nodejs.org/en/blog/release/v19.9.0) installed on your computer to start coding.
+- To get all the project dependencies run at the root folder of your project `npm install`
+- Configuration environment variables
+  - Create a `.env` file at the root folder of your project
+  - Create the following variables 
+  ```
+  MONGO_CONNECTION_URI=Your MongoDB connection string
+  JWT_TOKEN=Default JWT token signed with HS256 (JWT_SECRET)
+  JWT_SECRET=JWT Secret to sign your JWT tokens
+  INVALID_JWT_TOKEN=Invalid JWT token to test the authentication
+  TEST_USER_ID=Test user ID to test the authentication
+  ```
+  - Fill the variables with your own values
+- To run the project in dev-mode run `npm run start:dev`
+- To run the project in production mode run `npm run start:prod`
+- To run tests run `npm run test`
 
-# watch mode
-$ npm run start:dev
+It's optional but you can use [Docker](https://www.docker.com/) to run the project in a container and deploy easily in the future. The project has a preconfigured `Dockerfile` to deploy the project in a container.
 
-# production mode
-$ npm run start:prod
-```
+The project is actually deployed in [FL{}](https://www.flo.com) servers using Docker
 
-## Test
+### 🚀 Start coding
 
-```bash
-# unit tests
-$ npm run test
+- You can find the main file of the project in `src/main.ts`
+- Actually the project has 8 modules
+  - `app` - Default app module
+  - `users` - Users module
+  - `mod` - Guilds module
+  - `channels` - Channels module
+  - `auth` - Authentication module
+  - `rank` - Rank module
+  - `credentials` - Credentials module
+  - `database` - Database module
+- You can create a new module using the command `nest g module <module-name>` and nest will create a new module in the `src` folder
 
-# e2e tests
-$ npm run test:e2e
+### 🚩 API Messages
 
-# test coverage
-$ npm run test:cov
-```
+The project works with a messages.ts file that contains all the messages that the API can return and sync with tests and other services. The file is located in `src/consts/messages.ts`
 
-## Support
+### 📝 License
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
-## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
