@@ -1,12 +1,11 @@
 import { Test } from '@nestjs/testing';
-import { INestApplication, Injectable, UnauthorizedException } from '@nestjs/common';
+import { INestApplication} from '@nestjs/common';
 import * as request from 'supertest';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { messages } from '../consts/api.messages';
 import { ChannelModule } from '../channels/channel.module';
-import mongoose from 'mongoose';
 
 describe('ChannelController', () => {
   let app: INestApplication;
