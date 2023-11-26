@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from 'src/schemas/user.schema';
-import { WarnSchema } from 'src/schemas/warn.schema';
-import { Model } from 'mongoose';
+import { UserSchema } from '../schemas/user.schema';
+import { WarnSchema } from '../schemas/warn.schema';
 import { WarningsService } from './warnings/warnings.mod.service';
 import { WarningsController } from './warnings/warnings.mod.controller';
 

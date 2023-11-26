@@ -2,7 +2,8 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../../schemas/user.schema';
-import { Warn, WarnDocument} from 'src/schemas/warn.schema';
+import { Warn, WarnDocument} from '../../schemas/warn.schema';
+import { messages } from '../../consts/api.messages';
 
 @Injectable()
 export class WarningsService {
@@ -12,11 +13,11 @@ export class WarningsService {
   async getUserWarnings(user?: User): Promise<{ [key: number]: Warn }> {
 
     if (!user) {
-      throw new NotFoundException('Could not find user. Please check the userId and add to request params.');
+      throw new NotFoundException(messages.warnings.notFound);
     }
     const warns = await this.warnModel.find({userId: user.userId}).exec();
     if (warns.length === 0) {
-      throw new NotFoundException('The user has no warnings.');
+      throw new NotFoundException(messages.warnings.noWarns);
     }
     
     return warns.reduce((list, warn, index) => ({ ...list, [(index + 1)]: warn.toObject() }), {});
@@ -25,7 +26,7 @@ export class WarningsService {
   async deleteWarn(warn?: Warn): Promise<any> {
 
     if (!warn) {
-      throw new NotFoundException('Could not find warn. Please check the warnId and add to request params.');
+      throw new NotFoundException(messages.warnings.notFound2);
     }
     await this.warnModel.deleteOne({warnId: warn.warnId}).exec()
     .then(() => this.logger.log(`Warn ${warn.warnId} deleted from user ${warn.userId}.`));
@@ -34,10 +35,6 @@ export class WarningsService {
         message: `Warn ${warn.warnId} deleted from user ${warn.userId}.`,
         status: 200
     };
-  }
-
-  async getDefault(): Promise<any> {
-    return { message: "Bad Request. Please try again with other request.", status: 400 };
   }
 
   async getUserById(id: string): Promise<User> {

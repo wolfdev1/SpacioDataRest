@@ -1,30 +1,29 @@
 import { Controller, Get, Injectable, NotFoundException, Param, Res } from '@nestjs/common';
 
 import { Response } from 'express';
-import { User } from '../../schemas/user.schema';
-import { Warn } from 'src/schemas/warn.schema';
-import { Delete, Put, Query } from '@nestjs/common/decorators/http';
+import { Warn } from '../../schemas/warn.schema';
+import { Delete } from '@nestjs/common/decorators/http';
 import { WarningsService } from './warnings.mod.service'; 
+import { messages } from '../../consts/api.messages';
 
 @Controller("mod/warnings")
 @Injectable()
 export class WarningsController {
   constructor(private readonly warnService: WarningsService) {}
-  private readonly msg = { message: "Bad Request. This endpoint works with GET and DELETE requests and use /mod/warnings/user & /mod/warnings/warn endpoint." };
   
     @Get()
-    findAll(@Res() res: Response): any {
-        return res.status(400).json(this.msg);
+    default(): any {
+        throw new NotFoundException(messages.warnings.notFound);
     }
     
     @Get('user')
     async getDefault(@Res() res: Response): Promise<any> {
-        res.status(400).json(this.msg);
+        res.status(400).json(messages);
     }
 
     @Delete('warn')
     async deleteDefault(@Res() res: Response): Promise<any> {
-        res.status(400).json(this.msg);
+        res.status(400).json(messages.warnings.badRequest);
     }
 
     @Get('user/:id')

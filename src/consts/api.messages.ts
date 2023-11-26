@@ -15,5 +15,11 @@ export const messages = {
     },
     channel: {
         badRequest: "Bad Request. This endpoint works with PUT & GET requests and use /rank/leaderboard, /rank/user/resetxp or ../setxp endpoints." 
+    },
+    warnings: {
+        notFound: 'Could not find user. Please check the user id and add to request params.',
+        notFound2: 'Could not find warn. Please check the warn id and add to request params.',
+        noWarns: 'The user has no warnings.',
+        badRequest: "Bad Request. This endpoint works with GET and DELETE requests and use /mod/warnings/user & /mod/warnings/warn endpoint."
     }
 }
