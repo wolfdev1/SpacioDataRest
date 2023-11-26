@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../../schemas/user.schema';
@@ -33,7 +33,7 @@ export class WarningsService {
 
     return {
         message: `Warn ${warn.warnId} deleted from user ${warn.userId}.`,
-        status: 200
+        status: HttpStatus.OK
     };
   }
 

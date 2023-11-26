@@ -1,27 +1,48 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+// Import necessary modules and constants
+import { Injectable, BadRequestException, Logger, NotFoundException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { messages } from 'src/consts/api.messages';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../schemas/user.schema';
+import { messages } from '../consts/api.messages';
 
+// Decorator to mark the class as a provider
 @Injectable()
 export class ResetService {
+  // Inject the User model into the service
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+
+  // Logger instance for logging
   private readonly logger = new Logger("Rank");
 
-  async resetXp(user: User): Promise<any> {
+  // Method to reset XP for a user
+  async resetXp(userId: string): Promise<any> {
+    // Validate the userId to prevent memory leaks
+    if (!userId || typeof userId !== 'string') {
+      throw new BadRequestException('Invalid user ID');
+    }
+
+    // Find the user with the provided userId
+    const user = await this.userModel.findOne({ userId }).exec();
+
+    // If user not found, throw NotFoundException
     if (!user) {
       throw new NotFoundException(messages.rank.notFound);
     }
-    await this.userModel.updateOne(
-            { userId: user.userId },
-            { xp: 0, level: 0 }
-        ).exec()
-        .then(() => this.logger.log(`User ${user.userId} XP reseted.`));
 
+    // Reset the user's XP and level in the database
+    await this.userModel.updateOne(
+      { userId },
+      { xp: 0, level: 0 }
+    ).exec()
+    .then(() => {
+      // Log the reset
+      this.logger.log(`User ${userId} XP reseted.`);
+    });
+
+    // Return a message indicating the XP has been reset
     return {
-        message: `User ${user.userId} XP reseted.`,
-        status: 200
+      message: `User ${userId} XP reseted.`,
+      status: HttpStatus.OK
     };
   }
 }

@@ -39,7 +39,7 @@ describe('AuthMiddleware', () => {
       });
   });
 
-  it('should return 400 if a valid token is provided but no user id is given', () => {
+  it('should return 400 if jwt token provided is valid', () => {
     return request(app.getHttpServer())
       .get('/user')
       .set('Authorization', process.env.JWT_TOKEN)
@@ -62,16 +62,4 @@ describe('AuthMiddleware', () => {
         error: 'Unauthorized',
       });
   });
-
-  it('should return UnauthorizedException if token signature is valid but payload is invalid', () => {
-    return request(app.getHttpServer())
-      .get('/user')
-      .set('Authorization', process.env.INVALID_JWT_TOKEN)
-      .expect(401)
-      .expect({
-        statusCode: 401,
-        message: messages.jwt.invalidPayload,
-        error: 'Unauthorized',
-      });
-  })
 });

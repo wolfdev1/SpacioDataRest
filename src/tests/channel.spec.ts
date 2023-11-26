@@ -44,7 +44,9 @@ describe('ChannelController', () => {
         .set('Authorization', process.env.JWT_TOKEN)
         .expect(400)
         .expect({
+            statusCode: 400,
             message: messages.channel.badRequest,
+            error: 'Bad Request',
         });
       });    
     });

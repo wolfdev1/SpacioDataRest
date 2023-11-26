@@ -1,0 +1,1 @@
+export const XP_LEVEL_RATIO = 350;

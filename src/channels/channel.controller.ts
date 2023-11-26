@@ -1,56 +1,102 @@
-import { Controller, Get, Injectable, Res } from '@nestjs/common';
-
-import { Response } from 'express';
-import { Put, Query } from '@nestjs/common/decorators/http';
+// Import necessary modules and classes
+import { Controller, Get, Put, Query, Res, HttpStatus, BadRequestException } from '@nestjs/common';
 import { BotChannelService } from './bot.channel.service';
-import { GuildChannelService } from './guild.channel.service';
 import { XpChannelService } from './xp.channel.service';
-import { BotChannel } from 'src/schemas/bot_channel.schema';
+import { Response } from 'express';
+import { BotChannel } from '../schemas/bot_channel.schema';
+import { GuildChannelService } from './guild.channel.service';
 import { messages } from '../consts/api.messages';
 
-@Controller("channels")
-@Injectable()
+// Use the @Controller decorator to define the controller and the base route
+@Controller('channels')
 export class ChannelController {
-  constructor(private readonly botChannelService: BotChannelService, private readonly guildChannelService: GuildChannelService, private readonly xpChannelService: XpChannelService) {}
-    
+  // Inject the BotChannelService and XpChannelService into the controller
+  constructor(private readonly botChannelService: BotChannelService, private readonly xpChannelService: XpChannelService, private readonly guildChannelService: GuildChannelService) {}
+
+    // Define a default GET endpoint
     @Get()
-    findAll(@Res() res: Response): any {
-        return res.status(400).json({message: messages.channel.badRequest});
+    async default(): Promise<any> {
+        // Throw a BadRequestException
+        throw new BadRequestException(messages.channel.badRequest);
     }
 
-    @Get('guild')
-    async getGuildChannels(@Query('showPrivate') showPrivate?: boolean, @Res() res?: Response): Promise<any> {
-        const channels = await this.guildChannelService.getGuildChannels();
-
-        if (showPrivate) {
-            res.status(200).json(channels);
-        }
-        res.status(200).json(Object.values(channels).filter(channel => !channel.private));
-    }
-
+    // Define a GET endpoint for retrieving bot channels
     @Get('bot')
     async getBotChannels(@Res() res: Response): Promise<any> {
+        try {
+        // Call the botChannelService to get the bot channels
         const channels = await this.botChannelService.getBotChannels();
-        res.status(200).json(channels);
+        // Send the channels as the response
+        res.status(HttpStatus.OK).json(channels);
+        } catch (error) {
+        // If an error occurs, throw a BadRequestException
+        throw new BadRequestException(error.message);
+        }
     }
 
+    // Define a GET endpoint for retrieving XP channels
     @Get('xp')
     async getXpChannels(@Res() res: Response): Promise<any> {
+        try {
+        // Call the xpChannelService to get the XP channels
         const channels = await this.xpChannelService.getXpChannels();
-        res.status(200).json(channels);
+        // Send the channels as the response
+        res.status(HttpStatus.OK).json(channels);
+        } catch (error) {
+        // If an error occurs, throw a BadRequestException
+        throw new BadRequestException(error.message);
+        }
     }
 
+    // Define a GET endpoint for retrieving guild channels
+    @Get('guild')
+    async getGuildChannels(@Res() res: Response): Promise<any> {
+    try {
+        // Call the guildChannelService to get the guild channels
+        const channels = await this.guildChannelService.getGuildChannels();
+        // Send the channels as the response
+        res.status(HttpStatus.OK).json(channels);
+    } catch (error) {
+        // If an error occurs, throw a BadRequestException
+        throw new BadRequestException(error.message);
+        }
+    }
+
+    // Define a PUT endpoint for updating a bot channel
     @Put('bot')
     async putBotChannel(@Query('id') id: string, @Query('name') name: string, @Res() res: Response): Promise<any> {
+        // Validate the input parameters
+        if (!id || !name) {
+        throw new BadRequestException('Invalid parameters');
+        }
+        try {
+        // Create a new BotChannel object
         const newChannel: BotChannel = {id: id, name: name} as BotChannel;
+        // Call the botChannelService to update the bot channel
         const channel = await this.botChannelService.putBotChannel(newChannel);
-        res.status(channel.status).json(channel);
+        // Send the updated channel as the response
+        res.status(HttpStatus.OK).json(channel);
+        } catch (error) {
+        // If an error occurs, throw a BadRequestException
+        throw new BadRequestException(error.message);
+        }
     }
-
+    
+    // Define a PUT endpoint for updating an XP channel
     @Put('xp')
     async putXpChannel(@Query('id') id: string, @Res() res: Response): Promise<any> {
+        // Validate the input parameters
+        if (!id) {
+        throw new BadRequestException('Invalid parameters');
+        }
+        try {
+        // Call the xpChannelService to update the XP channel
         const channel = await this.xpChannelService.putXpChannel(id);
-        res.status(channel.status).json(channel);
+        // Send the updated channel as the response
+        res.status(HttpStatus.OK).json(channel);
+        } catch (error) {
+        // If an error occurs, throw a BadRequestException
+        throw new BadRequestException(error.message);
+        }
     }
-
 }

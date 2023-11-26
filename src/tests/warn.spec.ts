@@ -39,4 +39,16 @@ describe('WarningsController', () => {
             error: 'Not Found',
         }); 
     });
+
+    it ('should return 400 if no user id is given', () => {
+        return request(app.getHttpServer())
+        .get('/mod/warnings/user')
+        .set('Authorization', process.env.JWT_TOKEN)
+        .expect(400)
+        .expect({
+            statusCode: 400,
+            message: messages.warnings.badRequest,
+            error: 'Bad Request',
+        });
+    });  
 });

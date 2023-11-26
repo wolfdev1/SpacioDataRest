@@ -1,8 +1,6 @@
-import { Controller, Get, Injectable, NotFoundException, Param, Res } from '@nestjs/common';
-
+import { Controller, Get, Injectable, NotFoundException, Param, Res, BadRequestException, Delete } from '@nestjs/common';
 import { Response } from 'express';
 import { Warn } from '../../schemas/warn.schema';
-import { Delete } from '@nestjs/common/decorators/http';
 import { WarningsService } from './warnings.mod.service'; 
 import { messages } from '../../consts/api.messages';
 
@@ -11,32 +9,31 @@ import { messages } from '../../consts/api.messages';
 export class WarningsController {
   constructor(private readonly warnService: WarningsService) {}
   
-    @Get()
-    default(): any {
-        throw new NotFoundException(messages.warnings.notFound);
-    }
+  @Get()
+  default(): any {
+    throw new NotFoundException(messages.warnings.notFound);
+  }
     
-    @Get('user')
-    async getDefault(@Res() res: Response): Promise<any> {
-        res.status(400).json(messages);
-    }
+  @Get('user')
+  async getDefault(): Promise<any> {
+    throw new BadRequestException(messages.warnings.badRequest);
+  }
 
-    @Delete('warn')
-    async deleteDefault(@Res() res: Response): Promise<any> {
-        res.status(400).json(messages.warnings.badRequest);
-    }
+  @Delete('warn')
+  async deleteDefault(): Promise<any> {
+    throw new BadRequestException(messages.warnings.badRequest);
+  }
 
-    @Get('user/:id')
-    async getUserDefault(@Param() params: any): Promise<{ [key: string]: Warn }> {
-        const list = await this.warnService.getUserWarnings(await this.warnService.getUserById(params.id));
-        return list;
-    }
+  @Get('user/:id')
+  async getUserWarnings(@Param('id') id: string): Promise<{ [key: string]: Warn }> {
+    const user = await this.warnService.getUserById(id);
+    return await this.warnService.getUserWarnings(user);
+  }
 
-    @Delete('warn/:id')
-    async deleteUserDefault(@Param() params: any, @Res() res: Response): Promise<any> {
-        const warn = await this.warnService.getWarnById(params.id);
-        const deleted = await this.warnService.deleteWarn(warn);
-        res.status(deleted.status).json(deleted);
-    }
-
+  @Delete('warn/:id')
+  async deleteWarn(@Param('id') id: string, @Res() res: Response): Promise<any> {
+    const warn = await this.warnService.getWarnById(id);
+    const deleted = await this.warnService.deleteWarn(warn);
+    res.status(deleted.status).json(deleted);
+  }
 }
