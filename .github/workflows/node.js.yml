@@ -29,3 +29,10 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: npm run test
+    env:
+      MONGO_CONNECTION_URI: ${{ vars.MONGO_CONNECTION_URI }}
+      JWT_SECRET: ${{ vars.JWT_SECRET }}
+      JWT_TOKEN: ${{ vars.JWT_TOKEN }}
+      INVALID_JWT_TOKEN: ${{ vars.INVALID_JWT_TOKEN }}
+      TEST_USER_ID: ${{ vars.TEST_USER_ID }}
+
