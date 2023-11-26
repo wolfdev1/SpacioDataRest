@@ -1,6 +1,7 @@
 import { Controller, Get, Injectable, NotFoundException, Param, Res } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { messages } from '../consts/api.messages';
 import { UserDto } from '../dto/user.dto';
 import { Response } from 'express';
 
@@ -10,10 +11,9 @@ import { Response } from 'express';
 export class UserController {
   constructor(@InjectModel('User') private readonly userModel: Model<UserDto>) {}
 
-
   @Get()
   findAll(@Res() res: Response): any {
-    res.status(400).json({ message: "Bad Request. User endpoint requires a id to retrive user data." });
+    res.status(400).json({ message: messages.user.badRequest, statusCode: 400, error: "Bad Request" });
   }
 
   @Get(":id")
@@ -23,11 +23,11 @@ export class UserController {
       user = await this.userModel.findOne({userId: params.id}).exec();
     } catch (error) {
       console.log(error);
-      throw new NotFoundException('Could not find user.');
+      throw new NotFoundException(messages.user.notFound);
       
     }
     if (!user) {
-      throw new NotFoundException('Could not find user. Please check the id.');
+      throw new NotFoundException(messages.user.notFound);
     }
     return user;
   }

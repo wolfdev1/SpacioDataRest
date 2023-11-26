@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BotChannel, BotChannelDocument } from '../schemas/bot_channel.schema';
-import { GuildChannel, GuildChannelDocument } from 'src/schemas/guild_channel.schema';
+import { GuildChannel, GuildChannelDocument } from '../schemas/guild_channel.schema';
 
 @Injectable()
 export class BotChannelService {

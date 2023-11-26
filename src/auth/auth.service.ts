@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CredentialsService } from '../credentials/credentials.service';
 import { Credentials } from '../interfaces/credentials.interface';
-import * as bcrypt from 'bcrypt';
+import { messages } from '../consts/api.messages';
 
 @Injectable()
 export class AuthService {
@@ -20,9 +20,9 @@ export class AuthService {
       if (c) {
         return payload;
       }
-      return new UnauthorizedException('Unauthorized. Token sign appears to be valid but user does not exist');
+      return new UnauthorizedException(messages.jwt.invalidPayload);
     } catch (e) {
-      return null;
+      return new UnauthorizedException(messages.jwt.invalid);
     }
   }
 

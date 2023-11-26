@@ -6,17 +6,16 @@ import { BotChannelService } from './bot.channel.service';
 import { GuildChannelService } from './guild.channel.service';
 import { XpChannelService } from './xp.channel.service';
 import { BotChannel } from 'src/schemas/bot_channel.schema';
-import { XpChannel } from 'src/schemas/xp_channel.schema';
+import { messages } from '../consts/api.messages';
 
 @Controller("channels")
 @Injectable()
 export class ChannelController {
   constructor(private readonly botChannelService: BotChannelService, private readonly guildChannelService: GuildChannelService, private readonly xpChannelService: XpChannelService) {}
-  private readonly msg = { message: "Bad Request. This endpoint works with PUT requests and use /rank/user/resetxp or ../setxp endpoints." };
     
     @Get()
     findAll(@Res() res: Response): any {
-        return res.status(400).json(this.msg);
+        return res.status(400).json({message: messages.channel.badRequest});
     }
 
     @Get('guild')
@@ -26,7 +25,7 @@ export class ChannelController {
         if (showPrivate) {
             res.status(200).json(channels);
         }
-        res.status(200).json(Object.values(channels).filter(channel => !channel.isPrivate));
+        res.status(200).json(Object.values(channels).filter(channel => !channel.private));
     }
 
     @Get('bot')

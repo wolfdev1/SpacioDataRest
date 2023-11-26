@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BotChannelSchema } from 'src/schemas/bot_channel.schema';
-import { XpChannelSchema } from 'src/schemas/xp_channel.schema';
-import { GuildChannelSchema } from 'src/schemas/guild_channel.schema';
+import { BotChannelSchema } from '../schemas/bot_channel.schema';
+import { XpChannelSchema } from '../schemas/xp_channel.schema';
+import { GuildChannelSchema } from '../schemas/guild_channel.schema';
 import { XpChannelService } from './xp.channel.service';
 import { BotChannelService } from './bot.channel.service';
 import { ChannelController } from './channel.controller';

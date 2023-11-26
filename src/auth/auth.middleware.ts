@@ -12,18 +12,14 @@ export class AuthMiddleware implements NestMiddleware {
     if (!authHeader) {
       throw new UnauthorizedException('Unauthorized. Spacio REST Service requires authorization header');
     }
-
-    try {
-      const token = authHeader.split(' ')[0];
-      
-      const payload = await this.authService.decode(token);
-      if (!payload) {
-        throw new UnauthorizedException('Invalid token');
-      }
-    } catch (e) {
-      throw new UnauthorizedException('Invalid token');
+  
+    const token = authHeader.split(' ')[0];
+    
+    const payloadOrError = await this.authService.decode(token);
+    if (payloadOrError instanceof UnauthorizedException) {
+      throw payloadOrError;
     }
-
+  
     next();
   }
 }

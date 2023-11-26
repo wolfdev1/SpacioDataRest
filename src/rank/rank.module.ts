@@ -4,6 +4,9 @@ import { RankService } from './rank.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from 'src/schemas/user.schema';
 import { CredentialsSchema } from 'src/schemas/credentials.schema';
+import { LeaderboardService } from './leaderboard.rank.service';
+import { ResetService } from './reset.rank.service';
+import { SetService } from './set.rank.service';
 
 @Module({
     imports: [
@@ -11,7 +14,13 @@ import { CredentialsSchema } from 'src/schemas/credentials.schema';
         MongooseModule.forFeature([{ name: 'Credentials', schema: CredentialsSchema }])
     ],
     controllers: [RankController],
-    providers: [RankService, Logger],
+    providers: [
+        RankService,
+        LeaderboardService,
+        ResetService,
+        SetService,
+        Logger
+    ],
 })
 
 export class RankModule {}
