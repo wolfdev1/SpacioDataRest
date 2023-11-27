@@ -1,5 +1,5 @@
 // Import necessary modules and classes
-import { Controller, Get, Put, Query, Res, HttpStatus, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Put, Query, Res, HttpStatus, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { BotChannelService } from './bot.channel.service';
 import { XpChannelService } from './xp.channel.service';
 import { Response } from 'express';
@@ -70,15 +70,17 @@ export class ChannelController {
         throw new BadRequestException('Invalid parameters');
         }
         try {
-        // Create a new BotChannel object
-        const newChannel: BotChannel = {id: id, name: name} as BotChannel;
         // Call the botChannelService to update the bot channel
-        const channel = await this.botChannelService.putBotChannel(newChannel);
+        const channel = await this.botChannelService.putBotChannel(id, name);
         // Send the updated channel as the response
-        res.status(HttpStatus.OK).json(channel);
+        if (channel.message !== null ) {
+            // Send a 409 conflict error if channel already exists or doesn't exists in guild
+            res.status(HttpStatus.CONFLICT).json({message: channel.message});
+        }
+        res.status(HttpStatus.OK).json({message: `Bot channel ${id} with name '${name}' set successfully`});
         } catch (error) {
-        // If an error occurs, throw a BadRequestException
-        throw new BadRequestException(error.message);
+        // If an error occurs, throw a InternalServerErrorException
+        throw new InternalServerErrorException(messages.channel.internalServerError);
         }
     }
     
@@ -89,14 +91,11 @@ export class ChannelController {
         if (!id) {
         throw new BadRequestException('Invalid parameters');
         }
-        try {
         // Call the xpChannelService to update the XP channel
-        const channel = await this.xpChannelService.putXpChannel(id);
+        const e = await this.xpChannelService.putXpChannel(id);
         // Send the updated channel as the response
-        res.status(HttpStatus.OK).json(channel);
-        } catch (error) {
-        // If an error occurs, throw a BadRequestException
-        throw new BadRequestException(error.message);
-        }
+
+        res.status(HttpStatus.OK).json({message: e.message});
+
     }
 }

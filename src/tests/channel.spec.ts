@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { INestApplication} from '@nestjs/common';
+import { HttpStatus, INestApplication} from '@nestjs/common';
 import * as request from 'supertest';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
@@ -30,24 +30,47 @@ describe('ChannelController', () => {
 
     const testCases = ['guild', 'bot', 'xp']
     testCases.forEach((testCase) => {
-        it(`should return 200 for ${testCase} channel endpoint`, async () => {
+        it(`should return OK for ${testCase} channel endpoint`, async () => {
             return request(app.getHttpServer())
             .get(`/channels/${testCase}`)
             .set('Authorization', process.env.JWT_TOKEN)
-            .expect(200)
+            .expect(HttpStatus.OK)
             });
     });
 
-    it('should return 400 if no channel id is given', () => {
+    it('should return BAD REQUEST if no channel id is given', () => {
         return request(app.getHttpServer())
         .get('/channels')
         .set('Authorization', process.env.JWT_TOKEN)
-        .expect(400)
+        .expect(HttpStatus.BAD_REQUEST)
         .expect({
-            statusCode: 400,
+            statusCode: HttpStatus.BAD_REQUEST,
             message: messages.channel.badRequest,
             error: 'Bad Request',
         });
       });    
+    
+    it('should return BAD REQUEST if id is invalid', () => {
+        return request(app.getHttpServer())
+        .put('/channels/xp')
+        .set('Authorization', process.env.JWT_TOKEN)
+        .expect(HttpStatus.BAD_REQUEST)
+        .expect({
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: messages.channel.badRequest3,
+            error: 'Bad Request',
+        });
+      });  
+
+    it('should return BAD REQUEST if id/name is invalid', () => {
+        return request(app.getHttpServer())
+        .put('/channels/xp')
+        .set('Authorization', process.env.JWT_TOKEN)
+        .expect(HttpStatus.BAD_REQUEST)
+        .expect({
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: messages.channel.badRequest3,
+            error: 'Bad Request',
+        });
     });
-  
+});

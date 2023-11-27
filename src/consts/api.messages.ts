@@ -2,6 +2,9 @@ export const messages = {
     general: {
         notAllowed: "Not Allowed. Please check the request method and try again.",
     },
+    auth: {
+        default: 'To login, please send a POST request to /auth/login with a JSON body containing your username and password.'
+    },
     jwt: {
         invalid: "Invalid credentials provided. Please try again.",
         unauthorized: "Unauthorized. Spacio REST Service requires authorization header",
@@ -14,6 +17,7 @@ export const messages = {
     rank: {
         badRequest: "Bad Request. Please try again with other request, this endpoint works with PUT & GET requests and use /rank/user/resetxp, /rank/leaderboard & ../setxp endpoints.",
         badRequest2: "Bad Request. Please check the id and xp.",
+        badRequest3: "Bad Request. Please check the id.",
         internalServerError: 'Internal Server Error. Please try again later.',
         notFound: 'Could not find user. Please check the id.'
     },
@@ -22,8 +26,9 @@ export const messages = {
         badRequest2: 'Channel requires a name & id, please try again.' ,
         badRequest3: 'Channel requires an id, please try again.' ,
         internalServerError: 'Internal Server Error. Please try again later.',
-        channelExists: 'Channel already exists',
         failAddBotChannel: 'Failed to add channel to bot channels.',
+        channelExists: 'Channel already exists in guild',
+        channelNotExists: 'Channel doesn\'t exists in guild',
         failGetBotChannels: 'Failed to get bot channels',
         failGetXpChannels: 'Failed to get XP channels',
     },

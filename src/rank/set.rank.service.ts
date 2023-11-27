@@ -1,7 +1,7 @@
 // Import necessary modules and constants
 import { HttpStatus, Injectable, InternalServerErrorException, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { messages } from 'src/consts/api.messages';
+import { messages } from '../consts/api.messages';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../schemas/user.schema';
 import { XP_LEVEL_RATIO } from '../consts/other';
@@ -16,14 +16,14 @@ export class SetService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   // Method to set XP for a user
-  async setXp(userId: string, xp: number): Promise<any> {
+  async setXp(userId: string, xp: any): Promise<any> {
     // Validate the userId and xp to prevent memory leaks
-    if (!userId || typeof userId !== 'string' || typeof xp !== 'number' || xp < 0) {
-      throw new BadRequestException('Invalid user ID or XP');
+    if (!userId || typeof userId !== 'string' || parseInt(xp) < 0) {
+      throw new BadRequestException(messages.rank.badRequest2);
     }
 
     // Find the user with the provided userId
-    const user = await this.userModel.findOne({ userId }).exec();
+    const user = await this.userModel.findOne({ userId: userId }).exec();
     // If user not found, throw NotFoundException
     if (!user) {
       throw new NotFoundException(messages.rank.notFound);

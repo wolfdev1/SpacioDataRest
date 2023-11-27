@@ -18,7 +18,7 @@ export class ResetService {
   async resetXp(userId: string): Promise<any> {
     // Validate the userId to prevent memory leaks
     if (!userId || typeof userId !== 'string') {
-      throw new BadRequestException('Invalid user ID');
+      throw new BadRequestException(messages.rank.badRequest3);
     }
 
     // Find the user with the provided userId

@@ -10,9 +10,6 @@ export class BotChannel {
 
   @Prop()
   id: string;
-
-  @Prop()
-  _id: false;
 }
 
 export const BotChannelSchema = SchemaFactory.createForClass(BotChannel);

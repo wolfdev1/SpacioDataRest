@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { INestApplication, UnauthorizedException } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
@@ -28,25 +28,25 @@ describe('WarningsController', () => {
         await app.close();
       }, 5555)
 
-    it('should return 400 if no user id is given', () => {
+    it('should return BAD REQUEST if no user id is given', () => {
         return request(app.getHttpServer())
         .get('/mod/warnings')
         .set('Authorization', process.env.JWT_TOKEN)
-        .expect(404)
+        .expect(HttpStatus.NOT_FOUND)
         .expect({
-            statusCode: 404,
+            statusCode: HttpStatus.NOT_FOUND,
             message: messages.warnings.notFound,
             error: 'Not Found',
         }); 
     });
 
-    it ('should return 400 if no user id is given', () => {
+    it ('should return BAD REQUEST if no user id is given', () => {
         return request(app.getHttpServer())
         .get('/mod/warnings/user')
         .set('Authorization', process.env.JWT_TOKEN)
-        .expect(400)
+        .expect(HttpStatus.BAD_REQUEST)
         .expect({
-            statusCode: 400,
+            statusCode: HttpStatus.BAD_REQUEST,
             message: messages.warnings.badRequest,
             error: 'Bad Request',
         });

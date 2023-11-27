@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { INestApplication, UnauthorizedException } from '@nestjs/common';
+import { HttpStatus, INestApplication, UnauthorizedException } from '@nestjs/common';
 import * as request from 'supertest';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
@@ -28,35 +28,35 @@ describe('UserController', () => {
         await app.close();
       }, 5555)
 
-    it('should return 400 if no user id is given', () => {
+    it('should return BAD REQUEST if no user id is given', () => {
         return request(app.getHttpServer())
         .get('/user')
         .set('Authorization', process.env.JWT_TOKEN)
-        .expect(400)
+        .expect(HttpStatus.BAD_REQUEST)
         .expect({
-            statusCode: 400,
+            statusCode: HttpStatus.BAD_REQUEST,
             message: messages.user.badRequest,
             error: 'Bad Request',
         });
     });
 
-    it('should return 404 if user is not found', () => {
+    it('should return NOT FOUND if user not found', () => {
         return request(app.getHttpServer())
         .get('/user/123456789')
         .set('Authorization', process.env.JWT_TOKEN)
-        .expect(404)
+        .expect(HttpStatus.NOT_FOUND)
         .expect({
-            statusCode: 404,
+            statusCode: HttpStatus.NOT_FOUND,
             message: messages.user.notFound,
             error: 'Not Found',
         });
     });
 
-    it('should return 200 if user is found', async () => {
+    it('should return OK if user is found', async () => {
         return request(app.getHttpServer())
         .get('/user/947615854114263110')
         .set('Authorization', process.env.JWT_TOKEN)
-        .expect(200)
+        .expect(HttpStatus.OK)
         .expect({
             userId: '947615854114263110',
             name: 'Spacio',

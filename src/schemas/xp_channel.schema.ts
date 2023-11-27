@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type XpChannelDocument = HydratedDocument<XpChannel>;
 
@@ -7,8 +7,7 @@ export type XpChannelDocument = HydratedDocument<XpChannel>;
 export class XpChannel {
   @Prop()
   id: string;
-  @Prop()
-  _id: false;
+
   
 }
 

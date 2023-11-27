@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { INestApplication, UnauthorizedException } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
@@ -28,7 +28,7 @@ describe('AuthMiddleware', () => {
     await app.close();
   })
 
-  it('should throw UnauthorizedException if no authorization header is present', () => {
+  it('should throw UNAUTHORIZED if no authorization header is present', () => {
     return request(app.getHttpServer())
       .get('/user')
       .expect(401)
@@ -39,7 +39,7 @@ describe('AuthMiddleware', () => {
       });
   });
 
-  it('should return 400 if jwt token provided is valid', () => {
+  it('should return BAD REQUEST if jwt token provided is valid', () => {
     return request(app.getHttpServer())
       .get('/user')
       .set('Authorization', process.env.JWT_TOKEN)
@@ -51,7 +51,7 @@ describe('AuthMiddleware', () => {
       });
   });
 
-  it('should throw UnauthorizedException if token is invalid', () => {
+  it('should throw UNAUTHORIZED if token is invalid', () => {
     return request(app.getHttpServer())
       .get('/user')
       .set('Authorization', "qwertyuiopasdfghjklzxcvbnm")
