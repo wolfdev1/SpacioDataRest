@@ -3,6 +3,7 @@ export const messages = {
         notAllowed: "Not Allowed. Please check the request method and try again.",
     },
     auth: {
+        badRequest: "Bad Request. Please check the username and password and try again.",
         default: 'To login, please send a POST request to /auth/login with a JSON body containing your username and password.'
     },
     jwt: {

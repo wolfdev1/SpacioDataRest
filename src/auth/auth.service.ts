@@ -1,15 +1,16 @@
 // Import necessary modules and interfaces
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CredentialsService } from '../credentials/credentials.service';
-import { Credentials } from '../interfaces/credentials.interface';
 import { messages } from '../consts/api.messages';
+import { Credentials, CredentialsDocument } from '../schemas/credentials.schema';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 // Use the @Injectable decorator to allow this service to be injected into other classes
 @Injectable()
 export class AuthService {
   constructor(
-    private credentialsService: CredentialsService, // Inject the CredentialsService
+    @InjectModel(Credentials.name) private credentials: Model<CredentialsDocument>, // Inject the Credentials model
     private jwtService: JwtService // Inject the JwtService
   ) {}
 
@@ -25,7 +26,7 @@ export class AuthService {
       const payload = this.jwtService.verify(token, {secret: process.env.JWT_SECRET});
 
       // Validate the payload by checking if the user exists
-      await this.credentialsService.findOne(payload.username);
+      await this.credentials.findOne({ username: payload.username }).exec();
       // Return the payload if the user exists
       return payload;
     } catch (error) {
@@ -34,22 +35,47 @@ export class AuthService {
     }
   }
 
-  // Method to log in a user and return a JWT token
-  async login(credentials: Credentials) {
-    // Validate the credentials before signing the token
-    if (!credentials || typeof credentials !== 'object') {
-      throw new UnauthorizedException(messages.jwt.invalid);
+   /**
+   * Method to log in a user and return a JWT token.
+   * @param {string} username - The username of the user.
+   * @param {string} password - The password of the user.
+   * @returns {Promise<any>} A promise that resolves to an object containing the status code, message, and JWT token.
+   */
+   async login(username: string, password: string): Promise<any> {
+
+    // Find the user with the provided username and password
+    const user = await this.credentials.findOne({
+      username: username,
+      password: password 
+    }).exec();
+
+    // If the user is not found, return an Unauthorized status code and message
+    if (!user) {
+      return {
+        message: messages.jwt.invalid,
+        statusCode: HttpStatus.UNAUTHORIZED,
+      }
     }
 
+    // If the provided password does not match the user's password, return an Unauthorized status code and message
+    if (user.password !== password) {
+      return {
+        message: messages.jwt.invalid,
+        statusCode: HttpStatus.UNAUTHORIZED
+      }
+    }
+
+    // Create a payload with the user's username and password
     const payload = {
-      username: credentials.username,
-      password: credentials.password,
-      perms: credentials.perms 
+      username: user.username,
+      password: user.password,
     }
 
-    // Return the signed token
+    // Return a success status code, success message, and a signed JWT token
     return {
-      access_token: this.jwtService.sign(payload),
+      statusCode: HttpStatus.OK,
+      message: 'Authentication successful.',
+      token: this.jwtService.sign(payload, {secret: process.env.JWT_SECRET}),
     };
   }
 }

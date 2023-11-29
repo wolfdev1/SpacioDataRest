@@ -3,13 +3,21 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CredentialsModule } from '../credentials/credentials.module';
 import { AuthMiddleware } from './auth.middleware';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
+import { AuthController } from './auth.controller';
+import { MongooseModule } from '@nestjs/mongoose';
+import { CredentialsSchema } from '../schemas/credentials.schema';
 
 // Use the @Module decorator to define the module
 @Module({
   // Import the CredentialsModule into this module
   imports: [
     CredentialsModule,
+    MongooseModule.forFeature([{ name: 'Credentials', schema: CredentialsSchema }]),
+  ],
+  // Define the controller for this module
+  controllers: [
+    AuthController
   ],
   // Define the AuthService and JwtService as providers that belong to this module
   providers: [AuthService, JwtService],

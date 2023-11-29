@@ -67,7 +67,7 @@ export class ChannelController {
     async putBotChannel(@Query('id') id: string, @Query('name') name: string, @Res() res: Response): Promise<any> {
         // Validate the input parameters
         if (!id || !name) {
-        throw new BadRequestException('Invalid parameters');
+        throw new BadRequestException(messages.channel.badRequest3);
         }
         try {
         // Call the botChannelService to update the bot channel
@@ -89,7 +89,7 @@ export class ChannelController {
     async putXpChannel(@Query('id') id: string, @Res() res: Response): Promise<any> {
         // Validate the input parameters
         if (!id) {
-        throw new BadRequestException('Invalid parameters');
+        throw new BadRequestException(messages.channel.badRequest3);
         }
         // Call the xpChannelService to update the XP channel
         const e = await this.xpChannelService.putXpChannel(id);

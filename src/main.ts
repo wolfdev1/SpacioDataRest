@@ -1,13 +1,13 @@
 // Import necessary modules and classes
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger } from '@nestjs/common';
+import { BadRequestException, Logger, ValidationPipe } from '@nestjs/common';
 
 // Define the bootstrap function
 async function bootstrap() {
   // Create a Nest application instance with the AppModule
   const app = await NestFactory.create(AppModule);
-  
+  app.useGlobalPipes(new ValidationPipe());
   // Create a new Logger instance with the 'Main' context
   const logger = new Logger('Main');
   

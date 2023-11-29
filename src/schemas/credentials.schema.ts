@@ -10,9 +10,6 @@ export class Credentials {
 
   @Prop()
   password: string;
-
-  @Prop()
-  perms: string;
   
 }
 
