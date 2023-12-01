@@ -1,0 +1,60 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model botchannels {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  v    Int?   @map("__v")
+  id_  String @map("id")
+  name String
+}
+
+model credentials {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  password String
+  username String
+}
+
+model guildchannels {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  id_          String  @map("id")
+  name         String
+  nsfw         Boolean
+  parent_id    String
+  parent_name  String
+  position     Int
+  private      Boolean
+  slowmode     Int
+  time_created String
+  topic        String
+  type         String
+}
+
+model users {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  avatar_url String?
+  level      Int
+  name       String?
+  userId     String
+  xp         BigInt
+}
+
+model warns {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String
+  reason String
+  warnId String
+  modId String
+}
+
+model xpchannels {
+  id  Json   @id @map("_id")
+  v   Int    @map("__v")
+  id_ String @map("id")
+}

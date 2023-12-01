@@ -2,7 +2,6 @@ import { Test } from '@nestjs/testing';
 import { HttpStatus, INestApplication, UnauthorizedException } from '@nestjs/common';
 import * as request from 'supertest';
 import { AuthModule } from '../auth/auth.module';
-import { DatabaseModule } from '../database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { messages } from '../consts/api.messages';
 import { UserModule } from '../user/user.module';
@@ -16,7 +15,6 @@ describe('UserController', () => {
         ConfigModule.forRoot(),
         AuthModule,
         UserModule,
-        DatabaseModule
       ],
     }).compile();
 
@@ -61,7 +59,7 @@ describe('UserController', () => {
             userId: '947615854114263110',
             name: 'Spacio',
             avatar_url: 'discord.com',
-            xp: 9000,
+            xp: '9000',
             level: 25,
           });          
     });

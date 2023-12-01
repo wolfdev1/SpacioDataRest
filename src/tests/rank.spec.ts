@@ -2,7 +2,6 @@ import { Test } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AuthModule } from '../auth/auth.module';
-import { DatabaseModule } from '../database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { messages } from '../consts/api.messages';
 import { RankModule } from '../rank/rank.module';
@@ -16,7 +15,6 @@ describe('RankController', () => {
         ConfigModule.forRoot(),
         AuthModule,
         RankModule,
-        DatabaseModule
       ],
     }).compile();
 

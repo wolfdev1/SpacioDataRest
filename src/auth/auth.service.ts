@@ -2,15 +2,13 @@
 import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { messages } from '../consts/api.messages';
-import { Credentials, CredentialsDocument } from '../schemas/credentials.schema';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+import { PrismaService } from '../prisma.service';
 
 // Use the @Injectable decorator to allow this service to be injected into other classes
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(Credentials.name) private credentials: Model<CredentialsDocument>, // Inject the Credentials model
+    private prisma: PrismaService, // Inject the PrismaService
     private jwtService: JwtService // Inject the JwtService
   ) {}
 
@@ -26,7 +24,10 @@ export class AuthService {
       const payload = this.jwtService.verify(token, {secret: process.env.JWT_SECRET});
 
       // Validate the payload by checking if the user exists
-      await this.credentials.findOne({ username: payload.username }).exec();
+      await this.prisma.credentials.findFirst({where: {
+        username: payload.username,
+        password: payload.password
+      }})
       // Return the payload if the user exists
       return payload;
     } catch (error) {
@@ -44,10 +45,12 @@ export class AuthService {
    async login(username: string, password: string): Promise<any> {
 
     // Find the user with the provided username and password
-    const user = await this.credentials.findOne({
-      username: username,
-      password: password 
-    }).exec();
+    const user = await this.prisma.credentials.findFirst({
+      where: {
+        username: username,
+        password: password
+      }
+    });
 
     // If the user is not found, return an Unauthorized status code and message
     if (!user) {

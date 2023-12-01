@@ -1,15 +1,13 @@
 // Import necessary modules and constants
 import { Injectable, BadRequestException, Logger, NotFoundException, HttpStatus } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User, UserDocument } from '../schemas/user.schema';
 import { messages } from '../consts/api.messages';
+import { PrismaService } from '../prisma.service';
 
 // Decorator to mark the class as a provider
 @Injectable()
 export class ResetService {
   // Inject the User model into the service
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(private prisma: PrismaService) {}
 
   // Logger instance for logging
   private readonly logger = new Logger("Rank");
@@ -22,7 +20,9 @@ export class ResetService {
     }
 
     // Find the user with the provided userId
-    const user = await this.userModel.findOne({ userId }).exec();
+    const user = await this.prisma.users.findFirst({ 
+      where: { userId: userId }
+     });
 
     // If user not found, throw NotFoundException
     if (!user) {
@@ -30,10 +30,13 @@ export class ResetService {
     }
 
     // Reset the user's XP and level in the database
-    await this.userModel.updateOne(
-      { userId },
-      { xp: 0, level: 0 }
-    ).exec()
+    await this.prisma.users.update({
+      where: { id: user.id },
+      data: {
+        xp: BigInt(0),
+        level: 0
+      }
+    })
     .then(() => {
       // Log the reset
       this.logger.log(`User ${userId} XP reseted.`);

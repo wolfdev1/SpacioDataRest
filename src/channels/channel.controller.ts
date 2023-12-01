@@ -3,14 +3,12 @@ import { Controller, Get, Put, Query, Res, HttpStatus, BadRequestException, Inte
 import { BotChannelService } from './bot.channel.service';
 import { XpChannelService } from './xp.channel.service';
 import { Response } from 'express';
-import { BotChannel } from '../schemas/bot_channel.schema';
 import { GuildChannelService } from './guild.channel.service';
 import { messages } from '../consts/api.messages';
 
 // Use the @Controller decorator to define the controller and the base route
 @Controller('channels')
 export class ChannelController {
-  // Inject the BotChannelService and XpChannelService into the controller
   constructor(private readonly botChannelService: BotChannelService, private readonly xpChannelService: XpChannelService, private readonly guildChannelService: GuildChannelService) {}
 
     // Define a default GET endpoint

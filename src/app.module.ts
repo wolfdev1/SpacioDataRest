@@ -6,7 +6,6 @@ import { AuthModule } from './auth/auth.module';
 import { CredentialsModule } from './credentials/credentials.module';
 import { RankModule } from './rank/rank.module';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './database/database.module';
 import { ModModule } from './mod/mod.module';
 import { ChannelModule } from './channels/channel.module';
 
@@ -17,7 +16,6 @@ import { ChannelModule } from './channels/channel.module';
     AuthModule,
     CredentialsModule,
     RankModule,
-    DatabaseModule,
     ModModule,
     ChannelModule,
   ],

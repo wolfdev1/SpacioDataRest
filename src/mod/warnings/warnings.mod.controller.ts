@@ -1,8 +1,8 @@
 import { Controller, Get, Injectable, NotFoundException, Param, Res, BadRequestException, Delete } from '@nestjs/common';
 import { Response } from 'express';
-import { Warn } from '../../schemas/warn.schema';
 import { WarningsService } from './warnings.mod.service'; 
 import { messages } from '../../consts/api.messages';
+import { warns } from '@prisma/client';
 
 @Controller("mod/warnings")
 @Injectable()
@@ -25,7 +25,7 @@ export class WarningsController {
   }
 
   @Get('user/:id')
-  async getUserWarnings(@Param('id') id: string): Promise<{ [key: string]: Warn }> {
+  async getUserWarnings(@Param('id') id: string): Promise<{ [key: string]: warns }> {
     const user = await this.warnService.getUserById(id);
     return await this.warnService.getUserWarnings(user);
   }

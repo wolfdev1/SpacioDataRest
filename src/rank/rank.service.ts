@@ -1,15 +1,15 @@
 // Import necessary modules and constants
-import { HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { HttpStatus, Injectable} from '@nestjs/common';
 import { messages } from '../consts/api.messages';
-import { Model } from 'mongoose';
-import { User, UserDocument } from '../schemas/user.schema';
+import { PrismaService } from '../prisma.service';
+import { users } from '@prisma/client';
+
 
 // Decorator to mark the class as a provider
 @Injectable()
 export class RankService {
   // Inject the User model into the service
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(private prisma: PrismaService) {}
 
   // Method to return a default message and status
   async getDefault(): Promise<any> {
@@ -21,8 +21,10 @@ export class RankService {
   }
 
   // Method to get a user by ID
-  async getUserById(id: string): Promise<User> {
+  async getUserById(id: string): Promise<users> {
     // Return the user found by the provided ID
-    return this.userModel.findOne({ userId: id }).exec();
+    return this.prisma.users.findFirst({
+      where: { userId: id }
+    })
   }
 }
