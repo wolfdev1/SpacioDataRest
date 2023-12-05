@@ -1,22 +1,15 @@
 // Import necessary modules and classes
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { BotChannelSchema } from '../schemas/bot_channel.schema';
-import { XpChannelSchema } from '../schemas/xp_channel.schema';
-import { GuildChannelSchema } from '../schemas/guild_channel.schema';
 import { XpChannelService } from './xp.channel.service';
 import { BotChannelService } from './bot.channel.service';
 import { ChannelController } from './channel.controller';
 import { GuildChannelService } from './guild.channel.service';
+import { PrismaService } from '../prisma.service';
 
 // Use the @Module decorator to define the module
 @Module({
   // Import MongooseModule for database interaction and define the schemas for 'BotChannel', 'XpChannel', and 'GuildChannel'
-  imports: [
-    MongooseModule.forFeature([{ name: 'BotChannel', schema: BotChannelSchema }]),
-    MongooseModule.forFeature([{ name: 'XpChannel', schema: XpChannelSchema }]),
-    MongooseModule.forFeature([{ name: 'GuildChannel', schema: GuildChannelSchema }])
-  ],
+  imports: [],
   // Define the controllers that should be instantiated for this module
   controllers: [
     ChannelController
@@ -25,7 +18,8 @@ import { GuildChannelService } from './guild.channel.service';
   providers: [
     XpChannelService,
     BotChannelService,
-    GuildChannelService
+    GuildChannelService,
+    PrismaService
   ],
 })
 

@@ -2,7 +2,6 @@ import { Test } from '@nestjs/testing';
 import { HttpStatus, INestApplication} from '@nestjs/common';
 import * as request from 'supertest';
 import { AuthModule } from '../auth/auth.module';
-import { DatabaseModule } from '../database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { messages } from '../consts/api.messages';
 import { ChannelModule } from '../channels/channel.module';
@@ -16,7 +15,6 @@ describe('ChannelController', () => {
         ConfigModule.forRoot(),
         AuthModule,
         ChannelModule,
-        DatabaseModule
       ],
     }).compile();
 
@@ -26,7 +24,7 @@ describe('ChannelController', () => {
 
     afterEach(async () => {
         await app.close();
-    });
+    }, 5555);
 
     const testCases = ['guild', 'bot', 'xp']
     testCases.forEach((testCase) => {

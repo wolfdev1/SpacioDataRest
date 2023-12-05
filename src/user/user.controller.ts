@@ -1,9 +1,9 @@
 // Import the necessary modules
-import { BadRequestException, Controller, Get, Injectable, NotFoundException, Param, Res } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { BadRequestException, Controller, Get, Injectable, NotFoundException, Param } from '@nestjs/common';
 import { messages } from '../consts/api.messages';
 import { UserDto } from '../dto/user.dto';
+import { PrismaService } from '../prisma.service';
+import { users } from '@prisma/client';
 
 
 // Use the @Controller decorator to define the route path
@@ -11,7 +11,7 @@ import { UserDto } from '../dto/user.dto';
 @Injectable()
 export class UserController {
   // Constructor to inject the User model
-  constructor(@InjectModel('User') private readonly userModel: Model<UserDto>) {}
+  constructor(private prisma: PrismaService) {}
 
   // Default route to handle GET requests
   @Get()
@@ -22,12 +22,12 @@ export class UserController {
 
   // Route to get a user by ID
   @Get(":id")
-  async getUserById(@Param() params: any): Promise<UserDto> {
+  async getUserById(@Param() params: any) {
     // Declare a variable to hold the user
-    let user: UserDto | PromiseLike<UserDto>;
+    let user = null;
     try {
       // Try to find the user by ID
-      user = await this.userModel.findOne({userId: params.id}).exec();
+      user = await this.prisma.users.findFirst({ where: { userId: params.id } })
     } catch (error) {
       // If an error occurs, throw a NotFoundException
       throw new NotFoundException(messages.user.notFound);
@@ -37,6 +37,13 @@ export class UserController {
       throw new NotFoundException(messages.user.notFound);
     }
     // Return the found user
-    return user;
+    const xp: users = await user.xp.toString();
+    return {
+      userId: user.userId,
+      name: user.name,
+      avatar_url: user.avatar_url,
+      xp: xp,
+      level: user.level
+    };
   }
 }

@@ -1,7 +1,6 @@
 // Import necessary modules and classes
 import { Controller, Get, MethodNotAllowedException, Put, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { User } from '../schemas/user.schema';
 import { LeaderboardService } from './leaderboard.rank.service';
 import { ResetService } from './reset.rank.service';
 import { SetService } from './set.rank.service';
@@ -19,7 +18,7 @@ export class RankController {
 
   // Route to get the leaderboard
     @Get('leaderboard')
-    async getLeaderboard(@Query('limit') limit?: number): Promise<{ [key: string]: User }> {
+    async getLeaderboard(@Query('limit') limit?: number): Promise<{ [key: string]: object }> {
         // Call the leaderboard service to get the leaderboard and return it
         return await this.leaderboard.getLeaderboard(limit);
     }

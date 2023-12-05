@@ -1,10 +1,8 @@
 // Import necessary modules and constants
 import { HttpStatus, Injectable, InternalServerErrorException, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { messages } from '../consts/api.messages';
-import { Model } from 'mongoose';
-import { User, UserDocument } from '../schemas/user.schema';
 import { XP_LEVEL_RATIO } from '../consts/other';
+import { PrismaService } from '../prisma.service';
 
 // Decorator to mark the class as a provider
 @Injectable()
@@ -13,7 +11,7 @@ export class SetService {
   private readonly logger = new Logger("Rank");
 
   // Inject the User model into the service
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(private prisma: PrismaService) {}
 
   // Method to set XP for a user
   async setXp(userId: string, xp: any): Promise<any> {
@@ -23,7 +21,10 @@ export class SetService {
     }
 
     // Find the user with the provided userId
-    const user = await this.userModel.findOne({ userId: userId }).exec();
+    const user = await this.prisma.users.findFirst({
+      where: {
+        userId: userId
+      }});
     // If user not found, throw NotFoundException
     if (!user) {
       throw new NotFoundException(messages.rank.notFound);
@@ -34,13 +35,16 @@ export class SetService {
 
     try {
       // Update the user's XP and level in the database
-      const updateResult = await this.userModel.updateOne(
-        { userId },
-        { xp, level }
-      ).exec();
+      const update = await this.prisma.users.update({
+        where: { id: user.id },
+        data: {
+          xp: BigInt(xp),
+          level: level
+        }
+      });
 
       // If update was successful
-      if (updateResult.modifiedCount > 0) {
+      if (update) {
         // Log the update
         this.logger.log(`User ${userId} XP set to ${xp} (Level ${level}).`);
 
