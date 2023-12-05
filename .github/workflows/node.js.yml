@@ -5,13 +5,12 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,19 +19,18 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build
-    - run: npm run test
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test
     env:
-      MONGO_CONNECTION_URI: ${{ vars.MONGO_CONNECTION_URI }}
+      DATABASE_URL: ${{ vars.DATABASE_URL }}
       JWT_SECRET: ${{ vars.JWT_SECRET }}
       JWT_TOKEN: ${{ vars.JWT_TOKEN }}
       INVALID_JWT_TOKEN: ${{ vars.INVALID_JWT_TOKEN }}
       TEST_USER_ID: ${{ vars.TEST_USER_ID }}
-
