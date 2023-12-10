@@ -2,7 +2,7 @@
 import { HttpStatus, Injectable} from '@nestjs/common';
 import { messages } from '../consts/api.messages';
 import { PrismaService } from '../prisma.service';
-import { users } from '@prisma/client';
+import type { users } from '@prisma/client';
 
 
 // Decorator to mark the class as a provider
