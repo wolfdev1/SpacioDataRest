@@ -10,7 +10,7 @@ export class LeaderboardService {
 
   // Method to get the leaderboard
   async getLeaderboard(limit?: number): Promise<any> {
-    // Validate the limits to prevent memory leaks
+    // Validate the limits to prevent negative or zero limits
     if (limit && (typeof limit !== 'number' || limit <= 0)) {
       throw new BadRequestException('Invalid limit');
     }
@@ -24,7 +24,6 @@ export class LeaderboardService {
       take: limit
     })
     
-
     // Reduce the users array to an object with the rank as the key and the user as the value
     return users.reduce((leaderboard, user, index) => ({
       ...leaderboard, 

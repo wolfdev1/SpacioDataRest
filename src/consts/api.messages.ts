@@ -30,6 +30,7 @@ export const messages = {
         failAddBotChannel: 'Failed to add channel to bot channels.',
         channelExists: 'Channel already exists in guild',
         channelNotExists: 'Channel doesn\'t exists in guild',
+        failGetGuildChannels: 'Failed to get guild channels',
         failGetBotChannels: 'Failed to get bot channels',
         failGetXpChannels: 'Failed to get XP channels',
     },
